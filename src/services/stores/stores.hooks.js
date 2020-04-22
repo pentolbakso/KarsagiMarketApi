@@ -7,7 +7,7 @@ const restrict = [
   //console.log("params",context.params);
   authenticate("jwt"),
   iff(
-    (context) => context.params.user.role != "admin",
+    (context) => context.params.user && context.params.user.role != "admin",
     setField({
       from: "params.user._id",
       as: "params.query.user",

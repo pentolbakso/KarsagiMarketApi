@@ -12,11 +12,11 @@ module.exports = function (app) {
       store: { type: mongoose.ObjectId, required: true },
       name: { type: String, required: true },
       description: { type: String },
-      price: { type: Number },
+      price: { type: Number, default: 0 },
       weight: { type: Number, default: 0 },
-      isNegotiable: { type: Boolean, default: false },
       isPromoPrice: { type: Boolean, default: false },
       isReadyStock: { type: Boolean, default: true },
+      notes: { type: String },
     },
     {
       timestamps: true,

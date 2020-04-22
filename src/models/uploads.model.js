@@ -1,36 +1,18 @@
-// stores-model.js - A mongoose model
+const mongoose = require("mongoose");
+// uploads-model.js - A mongoose model
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-const mongoose = require("mongoose");
-
-const pointSchema = new mongoose.Schema({
-  type: {
-    type: String,
-    enum: ["Point"],
-    required: true,
-  },
-  coordinates: {
-    type: [Number],
-    required: true,
-  },
-});
-
 module.exports = function (app) {
-  const modelName = "stores";
+  const modelName = "uploads";
   const mongooseClient = app.get("mongooseClient");
   const { Schema } = mongooseClient;
   const schema = new Schema(
     {
-      user: { type: mongoose.ObjectId, required: true },
-      title: { type: String, required: true },
-      description: { type: String },
-      phonenumber: { type: String },
-      wanumber: { type: String },
-      address: { type: String },
-      location: {
-        type: pointSchema,
-      },
+      filename: { type: String },
+      path: { type: String },
+      size: { type: Number },
+      user: { type: mongoose.ObjectId },
     },
     {
       timestamps: true,

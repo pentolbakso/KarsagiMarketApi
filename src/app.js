@@ -9,6 +9,7 @@ const feathers = require("@feathersjs/feathers");
 const configuration = require("@feathersjs/configuration");
 const express = require("@feathersjs/express");
 const socketio = require("@feathersjs/socketio");
+const Cors = require("cors");
 
 const middleware = require("./middleware");
 const services = require("./services");
@@ -50,6 +51,7 @@ app.configure(channels);
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());
 app.use(express.errorHandler({ logger }));
+app.use(Cors({ origin: "*" }));
 
 app.hooks(appHooks);
 

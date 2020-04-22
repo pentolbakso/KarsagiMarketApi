@@ -10,7 +10,7 @@ module.exports = function (app) {
       email: { type: String, unique: true, lowercase: true },
       password: { type: String },
       googleId: { type: String },
-      role: { type: String, default: "user" },
+      role: { type: String, default: "seller" },
 
       fullname: { type: String },
     },
