@@ -4,17 +4,35 @@ const createModel = require("../../models/uploads.model");
 const { BadRequest } = require("@feathersjs/errors");
 const hooks = require("./uploads.hooks");
 const multer = require("multer");
+const sharp = require("sharp");
+const fs = require("fs");
+
+function createDir(dir) {
+  if (!fs.existsSync(dir, { recursive: true })) {
+    fs.mkdirSync(dir);
+  }
+}
 
 module.exports = function (app) {
   const options = {
     Model: createModel(app),
     paginate: app.get("paginate"),
-    multi: true,
+    multi: false, //set true for multi upload
   };
+
+  const UPLOAD_DIR = "public/uploads/images";
+  createDir(UPLOAD_DIR);
+  createDir(UPLOAD_DIR + "/ori");
+
+  // for conversions
+  const imageSizes = [200, 600];
+  imageSizes.forEach((size) => {
+    createDir(UPLOAD_DIR + "/" + size);
+  });
 
   const disk = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "public/uploads");
+      cb(null, UPLOAD_DIR + "/ori");
     },
     filename: (req, file, cb) => {
       const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -26,7 +44,7 @@ module.exports = function (app) {
   const multipartMiddleware = multer({
     storage: disk,
     limits: {
-      fileSize: 1024 * 1024 * 10, // 10 megabytes
+      fileSize: 1024 * 1024 * 5, // 5 megabytes
     },
     fileFilter: (req, file, cb) => {
       const allowedMimeTypes = ["image/png", "image/jpeg", "image/pjpeg"];
@@ -40,10 +58,11 @@ module.exports = function (app) {
 
   app.use(
     "/uploads",
-    multipartMiddleware.array("files"),
+    multipartMiddleware.single("file"), //change to .array for multiple
     function (req, res, next) {
       const { method } = req;
       if (method === "POST" || method === "PATCH") {
+        /*  //multi upload codes
         const body = [];
         for (const file of req.files)
           body.push({
@@ -52,6 +71,30 @@ module.exports = function (app) {
             size: file.size,
           });
         req.body = method === "POST" ? body : body[0];
+        */
+        imageSizes.forEach((size) => {
+          sharp(req.file.path)
+            .resize(size, size, {
+              fit: "contain",
+              background: { r: 255, g: 255, b: 255, alpha: 1 },
+            })
+            .webp({ lossless: true, quality: 70 })
+            .toFile(UPLOAD_DIR + "/" + size + "/" + req.file.filename + ".webp")
+            .then((data) => {
+              sharp.cache(false);
+              // fs.unlink('./public/images/building/' + 'temp_' + filename)
+              console.log("done resizing " + size + " -> " + req.file.filename);
+            })
+            .catch((err) => {
+              console.log("ERR resizing " + req.file.filename + " => " + err);
+            });
+        });
+
+        req.body = {
+          filename: req.file.filename,
+          path: req.file.path,
+          size: req.file.size,
+        };
       }
       next();
     },

@@ -5,12 +5,16 @@ module.exports = {
     all: [
       authenticate("jwt"),
       (context) => {
-        //since we allow multiple upload, the data is an array
-        context.data.forEach((element) => {
-          //append user id from jwt
-          element.user = context.params.user._id;
-        });
         //console.log(context.data);
+
+        //multiple file upload
+        // context.data.forEach((element) => {
+        //   //append user id from jwt
+        //   element.user = context.params.user._id;
+        // });
+
+        //single file upload
+        context.data.user = context.params.user._id;
         return context;
       },
     ],
