@@ -6,5 +6,5 @@
     "default": 20,
     "max": 100
   },
-  "mongodb": "mongodb://karsagi@attaqwa@localhost:27072/karsagimarket"
+  "mongodb": "mongodb://karsagi:attaqwa@localhost:27072/karsagimarket"
 }
