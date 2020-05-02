@@ -1,4 +1,10 @@
 {
-  "host": "KarsagiMarketAPI-app.feathersjs.com",
-  "port": "PORT"
+  "host": "localhost",
+  "port": 3030,
+  "public": "../public/",
+  "paginate": {
+    "default": 20,
+    "max": 100
+  },
+  "mongodb": "mongodb://karsagi@attaqwa@localhost:27072/karsagimarket"
 }

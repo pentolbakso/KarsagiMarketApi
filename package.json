@@ -27,7 +27,7 @@
     "test": "yarn run lint && yarn run mocha",
     "lint": "eslint src/. test/. --config .eslintrc.json",
     "dev": "nodemon src/",
-    "start": "node src/",
+    "start": "NODE_ENV=production node src/",
     "mocha": "mocha test/ --recursive --exit"
   },
   "standard": {
