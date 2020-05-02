@@ -1,6 +1,7 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
 const { setField } = require("feathers-authentication-hooks");
 const { iff } = require("feathers-hooks-common");
+const { protect } = require("@feathersjs/authentication-local").hooks;
 
 // restrict to owner and admin!
 const restrict = [
@@ -15,11 +16,18 @@ const restrict = [
   ),
 ];
 
+function populateOwner(context) {
+  context.params.query["$populate"] = {
+    path: "user",
+  };
+  return context;
+}
+
 module.exports = {
   before: {
     all: [],
     find: [],
-    get: [],
+    get: [populateOwner],
     create: [...restrict],
     update: [...restrict],
     patch: [...restrict],
@@ -29,7 +37,7 @@ module.exports = {
   after: {
     all: [],
     find: [],
-    get: [],
+    get: [protect("user.password")],
     create: [],
     update: [],
     patch: [],

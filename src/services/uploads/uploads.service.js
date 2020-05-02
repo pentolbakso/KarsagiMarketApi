@@ -39,6 +39,8 @@ module.exports = function (app) {
       const ext = file.originalname.split(".").pop();
       //cb(null, `${Date.now()}-${file.originalname}`);
       cb(null, unique + "." + ext);
+      // let id = new mongoose.Types.ObjectId();
+      // cb(null, id);
     },
   });
   const multipartMiddleware = multer({

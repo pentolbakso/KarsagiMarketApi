@@ -20,11 +20,13 @@ module.exports = function (app) {
   service.hooks(hooks);
 
   // setup our nested routes
-  app.use("/users/:userId/stores", app.service("stores"));
+  //app.use("/users/:userId/stores", app.service("stores"));
+  app.use("/users/:userId/stores", new Stores(options, app));
   app.service("users/:userId/stores").hooks({
     before: {
       find(context) {
-        context.params.query.user = context.params.route.userId;
+        if (context.params.route.userId)
+          context.params.query.user = context.params.route.userId;
       },
       create: mapUserIdToData,
       update: mapUserIdToData,

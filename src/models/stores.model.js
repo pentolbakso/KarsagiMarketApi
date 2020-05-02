@@ -22,7 +22,7 @@ module.exports = function (app) {
   const { Schema } = mongooseClient;
   const schema = new Schema(
     {
-      user: { type: mongoose.ObjectId, required: true },
+      user: { type: mongoose.ObjectId, required: true, ref: "users" },
       title: { type: String, required: true },
       description: { type: String },
       phonenumber: { type: String },
@@ -31,6 +31,8 @@ module.exports = function (app) {
       location: {
         type: pointSchema,
       },
+      instagram: { type: String },
+      website: { type: String },
     },
     {
       timestamps: true,

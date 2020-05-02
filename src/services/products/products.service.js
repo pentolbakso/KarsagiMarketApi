@@ -13,6 +13,7 @@ module.exports = function (app) {
   const options = {
     Model: createModel(app),
     paginate: app.get("paginate"),
+    whitelist: ["$populate"],
   };
 
   // Initialize our service with any options it requires
@@ -26,7 +27,9 @@ module.exports = function (app) {
   app.service("stores/:storeId/products").hooks({
     before: {
       find(context) {
-        context.params.query.store = context.params.route.storeId;
+        //console.log("params", context.params);
+        if (context.params.route.storeId)
+          context.params.query.store = context.params.route.storeId;
       },
       create: mapStoreIdToData,
       update: mapStoreIdToData,

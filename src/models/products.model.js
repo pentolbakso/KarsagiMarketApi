@@ -9,13 +9,15 @@ module.exports = function (app) {
   const { Schema } = mongooseClient;
   const schema = new Schema(
     {
-      store: { type: mongoose.ObjectId, required: true },
+      store: { type: mongoose.ObjectId, required: true, ref: "stores" },
       name: { type: String, required: true },
       description: { type: String },
+      category: { type: String },
       price: { type: Number, default: 0 },
       weight: { type: Number, default: 0 },
       isPromoPrice: { type: Boolean, default: false },
       isReadyStock: { type: Boolean, default: true },
+      photos: [{ type: Object }],
       notes: { type: String },
     },
     {

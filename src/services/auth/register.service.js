@@ -6,14 +6,18 @@ class RegisterService {
     this.app = app;
   }
   async create(data, params) {
-    const { storeTitle, ...userData } = data;
+    const { storeTitle, phonenumber, ...userData } = data;
     // save user
     const users = this.app.service("users");
     const user = await users.create(userData);
     // save store
     if (storeTitle) {
       const stores = this.app.service("stores");
-      await stores.create({ user: user._id, title: storeTitle });
+      await stores.create({
+        user: user._id,
+        title: storeTitle,
+        phonenumber: phonenumber,
+      });
     }
     //generate token and return
     const auth = this.app.service("authentication");
