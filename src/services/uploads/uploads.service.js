@@ -80,8 +80,8 @@ module.exports = function (app) {
               fit: "contain",
               background: { r: 255, g: 255, b: 255, alpha: 1 },
             })
-            .webp({ lossless: true, quality: 70 })
-            .toFile(UPLOAD_DIR + "/" + size + "/" + req.file.filename + ".webp")
+            .jpeg({ quality: 70 })
+            .toFile(UPLOAD_DIR + "/" + size + "/" + req.file.filename + ".jpeg")
             .then((data) => {
               sharp.cache(false);
               // fs.unlink('./public/images/building/' + 'temp_' + filename)
