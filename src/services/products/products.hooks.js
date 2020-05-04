@@ -13,6 +13,20 @@ function populateStoreAndOwner(context) {
 
 function sortByUpdated(context) {
   context.params.query["$sort"] = { updatedAt: -1 };
+  return context;
+}
+
+function searchRegex(context) {
+  const query = context.params.query;
+  for (let field in query) {
+    //console.log(field, query[field]);
+    if (query[field].$search && field.indexOf("$") == -1) {
+      query[field] = { $regex: new RegExp(query[field].$search, "i") };
+    }
+  }
+  console.log("q", query);
+  context.params.query = query;
+  return context;
 }
 
 // TODO : check if user is store owner
@@ -20,7 +34,7 @@ function sortByUpdated(context) {
 module.exports = {
   before: {
     all: [],
-    find: [sortByUpdated],
+    find: [sortByUpdated, searchRegex],
     get: [populateStoreAndOwner],
     create: [authenticate("jwt")],
     update: [authenticate("jwt")],
