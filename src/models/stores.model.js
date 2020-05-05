@@ -23,10 +23,11 @@ module.exports = function (app) {
   const schema = new Schema(
     {
       user: { type: mongoose.ObjectId, required: true, ref: "users" },
+      status: { type: String, enum: ["open", "close"], default: "open" },
       title: { type: String, required: true },
       description: { type: String },
       phonenumber: { type: String },
-      wanumber: { type: String },
+      phonenumberAkhwat: { type: String },
       address: { type: String },
       location: {
         type: pointSchema,
