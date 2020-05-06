@@ -15,10 +15,10 @@
       "header": {
         "typ": "access"
       },
-      "audience": "https://yourdomain.com",
+      "audience": "https://karsagi.com",
       "issuer": "feathers",
       "algorithm": "HS256",
-      "expiresIn": "1d"
+      "expiresIn": "7d"
     },
     "local": {
       "usernameField": "email",
