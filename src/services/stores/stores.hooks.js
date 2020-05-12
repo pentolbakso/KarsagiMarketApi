@@ -2,6 +2,7 @@ const { authenticate } = require("@feathersjs/authentication").hooks;
 const { setField } = require("feathers-authentication-hooks");
 const { iff } = require("feathers-hooks-common");
 const { protect } = require("@feathersjs/authentication-local").hooks;
+const { slugify } = require("../../utils/formatter");
 
 // restrict to owner and admin!
 const restrict = [
@@ -23,14 +24,22 @@ function populateOwner(context) {
   return context;
 }
 
+function slugFromName(context) {
+  if (context.data.title) {
+    context.data.slug = slugify(context.data.title);
+  }
+
+  return context;
+}
+
 module.exports = {
   before: {
     all: [],
     find: [],
     get: [populateOwner],
-    create: [...restrict],
-    update: [...restrict],
-    patch: [...restrict],
+    create: [...restrict, slugFromName],
+    update: [...restrict, slugFromName],
+    patch: [...restrict, slugFromName],
     remove: [...restrict],
   },
 

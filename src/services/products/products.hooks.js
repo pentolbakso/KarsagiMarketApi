@@ -1,5 +1,6 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
 const { protect } = require("@feathersjs/authentication-local").hooks;
+const { slugify } = require("../../utils/formatter");
 
 function populateStoreAndOwner(context) {
   context.params.query["$populate"] = {
@@ -24,8 +25,16 @@ function searchRegex(context) {
       query[field] = { $regex: new RegExp(query[field].$search, "i") };
     }
   }
-  console.log("q", query);
+  //console.log("q", query);
   context.params.query = query;
+  return context;
+}
+
+function slugFromName(context) {
+  if (context.data.name) {
+    context.data.slug = slugify(context.data.name);
+  }
+
   return context;
 }
 
@@ -36,7 +45,7 @@ module.exports = {
     all: [],
     find: [sortByUpdated, searchRegex],
     get: [populateStoreAndOwner],
-    create: [authenticate("jwt")],
+    create: [authenticate("jwt"), slugFromName],
     update: [authenticate("jwt")],
     patch: [authenticate("jwt")],
     remove: [authenticate("jwt")],
