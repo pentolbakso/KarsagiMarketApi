@@ -25,6 +25,7 @@ module.exports = function (app) {
       user: { type: mongoose.ObjectId, required: true, ref: "users" },
       status: { type: String, enum: ["open", "close"], default: "open" },
       title: { type: String, required: true },
+      slug: { type: String },
       description: { type: String },
       phonenumber: { type: String },
       phonenumberAkhwat: { type: String },

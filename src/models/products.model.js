@@ -11,6 +11,7 @@ module.exports = function (app) {
     {
       store: { type: mongoose.ObjectId, required: true, ref: "stores" },
       name: { type: String, required: true },
+      slug: { type: String },
       description: { type: String },
       category: { type: String },
       price: { type: Number, default: 0 },
